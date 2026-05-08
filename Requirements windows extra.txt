@@ -1,0 +1,23 @@
+# AutoPrint - Windows Additional Requirements
+# Add these to your existing requirements.txt (or install separately)
+ 
+# Windows printer support (replaces CUPS/lp on Linux)
+pywin32==306
+ 
+# Redis client (same on all platforms)
+redis==5.0.1
+ 
+# Already in your requirements.txt — listed here for reference:
+# fastapi
+# uvicorn[standard]
+# sqlalchemy
+# psycopg2-binary
+# python-jose[cryptography]
+# passlib[bcrypt]
+# python-multipart
+# pymupdf
+# razorpay
+# fastapi-mail
+# python-dotenv
+# celery  (optional, if used)
+ 
