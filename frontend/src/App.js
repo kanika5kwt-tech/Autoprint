@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,20 +9,22 @@ import JobPreview from './pages/JobPreview';
 import PaymentPage from './pages/PaymentPage';
 import StatusPage from './pages/StatusPage';
 
-function App() {
-  return (
-    <BrowserRouter>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/job-preview" element={<JobPreview />} />
-        <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/status" element={<StatusPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem('token');
+  return token ? children : <Navigate to="/" />;
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/job-preview" element={<PrivateRoute><JobPreview /></PrivateRoute>} />
+        <Route path="/payment" element={<PrivateRoute><PaymentPage /></PrivateRoute>} />
+        <Route path="/status" element={<PrivateRoute><StatusPage /></PrivateRoute>} />
+      </Routes>
+    </Router>
+  );
+}

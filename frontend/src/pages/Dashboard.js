@@ -21,6 +21,8 @@ export default function Dashboard() {
 
   const fullName = localStorage.getItem('full_name') || 'Student';
 
+  const allowedExts = ['.pdf', '.jpg', '.jpeg', '.png', '.webp', '.tiff', '.tif', '.bmp', '.docx'];
+
   const handleLogout = () => {
     localStorage.clear();
     navigate('/login');
@@ -29,7 +31,18 @@ export default function Dashboard() {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.name.endsWith('.pdf')) return toast.error('Only PDF files allowed');
+
+    // Validate file extension
+    const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+    if (!allowedExts.includes(fileExt)) {
+      return toast.error('Only PDF, JPG, PNG, WEBP, TIFF, BMP, DOCX files allowed');
+    }
+
+    // Validate file size
+    const sizeMB = file.size / (1024 * 1024);
+    if (sizeMB > 20) {
+      return toast.error(`File too large (${sizeMB.toFixed(1)}MB). Max 20MB allowed.`);
+    }
 
     setUploading(true);
     const formData = new FormData();
@@ -45,7 +58,13 @@ export default function Dashboard() {
         ...prev,
         page_range_end: res.data.total_pages
       }));
-      toast.success(`PDF uploaded! ${res.data.total_pages} pages detected`);
+
+      const isImage = res.data.converted_to_pdf;
+      toast.success(
+        isImage
+          ? `Image converted to PDF! ${res.data.total_pages} page(s) detected`
+          : `File uploaded! ${res.data.total_pages} pages detected`
+      );
     } catch (err) {
       toast.error('Upload failed. Try again.');
     }
@@ -53,7 +72,7 @@ export default function Dashboard() {
   };
 
   const handleCreateJob = async () => {
-    if (!uploadedFile) return toast.error('Please upload a PDF first');
+    if (!uploadedFile) return toast.error('Please upload a file first');
 
     try {
       const res = await createJob({
@@ -62,7 +81,6 @@ export default function Dashboard() {
         total_pages: uploadedFile.total_pages,
         ...settings
       });
-      // Job data next page pe bhejo
       navigate('/job-preview', { state: { job: res.data, file: uploadedFile } });
     } catch (err) {
       toast.error('Failed to create job');
@@ -82,7 +100,7 @@ export default function Dashboard() {
 
       <div className="dash-content">
         <h1>New Print Job</h1>
-        <p className="subtitle">Upload your PDF and configure print settings</p>
+        <p className="subtitle">Upload your file and configure print settings</p>
 
         {/* Upload Area */}
         <div
@@ -92,14 +110,14 @@ export default function Dashboard() {
           <input
             ref={fileRef}
             type="file"
-            accept=".pdf"
+            accept=".pdf,.jpg,.jpeg,.png,.webp,.tiff,.tif,.bmp,.docx"
             onChange={handleFileChange}
             style={{ display: 'none' }}
           />
           {uploading ? (
             <div className="upload-loading">
               <div className="spinner" />
-              <p>Analyzing PDF...</p>
+              <p>Processing file...</p>
             </div>
           ) : uploadedFile ? (
             <div className="upload-success">
@@ -109,6 +127,7 @@ export default function Dashboard() {
                 <p className="file-info">
                   {uploadedFile.total_pages} pages •
                   {uploadedFile.has_colour_pages ? ' Has colour pages' : ' Black & White'}
+                  {uploadedFile.converted_to_pdf && ' • Converted from image'}
                 </p>
               </div>
               <button className="btn-change" onClick={(e) => {
@@ -120,8 +139,8 @@ export default function Dashboard() {
           ) : (
             <div className="upload-prompt">
               <span className="upload-icon">📄</span>
-              <p>Click to upload PDF</p>
-              <span>Max 20MB</span>
+              <p>Click to upload PDF or Image</p>
+              <span>PDF, JPG, PNG, WEBP, TIFF, BMP · Max 20MB</span>
             </div>
           )}
         </div>

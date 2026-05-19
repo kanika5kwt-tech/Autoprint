@@ -54,6 +54,8 @@ export default function Login() {
       localStorage.setItem('full_name', res.data.full_name);
       toast.success(`Welcome, ${res.data.full_name}!`);
       navigate('/dashboard');
+
+    
     } catch (err) {
       toast.error('Invalid OTP');
     }
