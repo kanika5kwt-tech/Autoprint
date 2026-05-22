@@ -12,11 +12,13 @@ logger = logging.getLogger(__name__)
 FAST2SMS_API_KEY = os.getenv("FAST2SMS_API_KEY")
 
 
+#def generate_otp() -> str:
+#    otp = ''.join(random.choices(string.digits, k=6))
+#    print(f"[OTP DEBUG] Generated OTP: {otp}")
+#    return otp
 def generate_otp() -> str:
-    otp = ''.join(random.choices(string.digits, k=6))
-    print(f"[OTP DEBUG] Generated OTP: {otp}")
-    return otp
-
+    # Static OTP for demo/testing
+    return "123456"
 
 def send_sms_otp(phone_number: str, otp_code: str) -> bool:
     """Send OTP via Fast2SMS. Returns True on success, False on failure."""

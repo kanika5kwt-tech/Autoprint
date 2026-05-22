@@ -5,7 +5,7 @@
 
 // Your laptop/server IP address
 // Run 'ipconfig' in terminal to find your IPv4 address
-const API_URL = 'http://192.168.1.2:8000';
+const API_URL = 'http://192.168.1.8:8000';
 
 export default {
   API_URL,

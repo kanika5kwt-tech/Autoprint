@@ -14,7 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const API_URL = 'http://192.168.1.2:8000';
+const API_URL = 'http://192.168.1.8:8000';
 
 export default function DashboardScreen({ navigation }) {
   const [uploadedFile, setUploadedFile] = useState(null);

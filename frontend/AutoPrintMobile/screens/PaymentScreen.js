@@ -13,7 +13,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const API_URL = 'http://192.168.1.2:8000';
+const API_URL = 'http://192.168.1.8:8000';
 
 export default function PaymentScreen({ navigation, route }) {
   const { job_id, job_code, total_amount } = route.params;

@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://192.168.1.2:8000'; // Change this to your laptop IP
+const API_URL = 'http://192.168.1.5:8000'; // Change this to your laptop IP
 
 export default function LoginScreen({ navigation }) {
   const [step, setStep] = useState('phone'); // phone | otp | register
@@ -25,24 +25,32 @@ export default function LoginScreen({ navigation }) {
   const [collegeId, setCollegeId] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSendOTP = async () => {
-    if (phone.length !== 10) {
-      return Alert.alert('Error', 'Enter valid 10-digit phone number');
+const handleSendOTP = async () => {
+  if (phone.length !== 10) {
+    return Alert.alert('Error', 'Enter valid 10-digit phone number');
+  }
+  setLoading(true);
+  try {
+    const response = await axios.post(`${API_URL}/auth/send-otp`, { phone_number: phone });
+    
+    // Show dev OTP if SMS failed (backend sends it back)
+    const devOtp = response.data?.dev_otp;
+    if (devOtp) {
+      Alert.alert('Dev Mode', `SMS failed. Use this OTP: ${devOtp}`);
+    } else {
+      Alert.alert('Success', 'OTP sent to your phone!');
     }
-    setLoading(true);
-    try {
-      await axios.post(`${API_URL}/auth/send-otp`, { phone_number: phone });
-      Alert.alert('Success', 'OTP sent! Check terminal for test OTP');
-      setStep('otp');
-    } catch (err) {
-      if (err.response?.status === 404) {
-        setStep('register');
-      } else {
-        Alert.alert('Error', 'Something went wrong. Try again.');
-      }
+    
+    setStep('otp');
+  } catch (err) {
+    if (err.response?.status === 404) {
+      setStep('register');
+    } else {
+      Alert.alert('Error', 'Something went wrong. Try again.');
     }
-    setLoading(false);
-  };
+  }
+  setLoading(false);
+};
 
   const handleRegister = async () => {
     if (!name || !collegeId) {
