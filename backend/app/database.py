@@ -9,8 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
  
-load_dotenv()
- 
+load_dotenv(override=False)   
 logger = logging.getLogger(__name__)
  
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:password@localhost/autoprint_db")

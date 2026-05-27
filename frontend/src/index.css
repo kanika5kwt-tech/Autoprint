@@ -1,47 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
-
-:root {
-  --primary: #6C63FF;
-  --primary-dark: #4B44CC;
-  --accent: #FF6584;
-  --bg: #0F0F1A;
-  --bg-card: #1A1A2E;
-  --bg-input: #16213E;
-  --text: #EAEAEA;
-  --text-muted: #888AAA;
-  --border: #2A2A4A;
-  --success: #43E97B;
-  --warning: #F8B500;
-  --error: #FF4D4D;
-  --radius: 16px;
-  --shadow: 0 8px 32px rgba(108, 99, 255, 0.15);
-}
-
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root {
+  --green: #639922;
+  --green-light: #EAF3DE;
+  --green-dark: #27500A;
+  --green-mid: #3B6D11;
+  --green-border: #c0dd97;
+  --bg: #f4f6f0;
+  --bg-card: #ffffff;
+  --bg-input: #f7f8f5;
+  --text: #1a1a1a;
+  --text-muted: #888888;
+  --border: #c0dd97;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(99, 153, 34, 0.08);
+  --amber: #FAEEDA;
+  --amber-text: #854F0B;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-}
-
-h1, h2, h3 {
-  font-family: 'Syne', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 button {
   cursor: pointer;
   border: none;
   outline: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
 }
 
 input {
   outline: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
+}
+
+a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--green-border);
+  border-radius: 3px;
+}
+
+/* Toast override */
+.Toastify__toast {
+  border-radius: 10px !important;
+  font-size: 14px !important;
+}
+
+.Toastify__toast--success {
+  background: #EAF3DE !important;
+  color: #27500A !important;
+}
+
+.Toastify__toast--error {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
 }

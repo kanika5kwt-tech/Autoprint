@@ -6,7 +6,7 @@ import './Login.css';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [step, setStep] = useState('phone'); // phone | otp | register
+  const [step, setStep] = useState('phone');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [name, setName] = useState('');
@@ -52,10 +52,9 @@ export default function Login() {
       localStorage.setItem('token', res.data.access_token);
       localStorage.setItem('user_id', res.data.user_id);
       localStorage.setItem('full_name', res.data.full_name);
+      localStorage.setItem('phone', phone);
       toast.success(`Welcome, ${res.data.full_name}!`);
       navigate('/dashboard');
-
-    
     } catch (err) {
       toast.error('Invalid OTP');
     }
@@ -65,15 +64,18 @@ export default function Login() {
   return (
     <div className="login-container">
       <div className="login-card">
+
+        {/* Logo */}
         <div className="login-logo">
-          <span className="logo-icon">🖨️</span>
+          <div className="logo-icon">🖨️</div>
           <h1>AutoPrint</h1>
           <p>Smart Campus Printing</p>
         </div>
 
+        {/* Phone Step */}
         {step === 'phone' && (
           <div className="login-form">
-            <h2>Welcome Back</h2>
+            <h2>Welcome back</h2>
             <p className="subtitle">Enter your phone number to continue</p>
             <div className="input-group">
               <span className="input-prefix">+91</span>
@@ -86,42 +88,61 @@ export default function Login() {
               />
             </div>
             <button className="btn-primary" onClick={handleSendOTP} disabled={loading}>
-              {loading ? 'Sending...' : 'Send OTP'}
+              {loading ? 'Sending...' : 'Send OTP →'}
+            </button>
+            <button className="btn-ghost" onClick={() => setStep('register')}>
+              New here? Register
             </button>
           </div>
         )}
 
+        {/* Register Step */}
         {step === 'register' && (
           <div className="login-form">
-            <h2>Create Account</h2>
-            <p className="subtitle">First time here? Register below</p>
+            <h2>Create account</h2>
+            <p className="subtitle">First time? Fill in your details</p>
             <input className="input-field" type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} />
             <input className="input-field" type="text" placeholder="College ID" value={collegeId} onChange={e => setCollegeId(e.target.value)} />
+            <div className="input-group">
+              <span className="input-prefix">+91</span>
+              <input
+                type="tel"
+                placeholder="Phone number"
+                value={phone}
+                onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                maxLength={10}
+              />
+            </div>
             <button className="btn-primary" onClick={handleRegister} disabled={loading}>
-              {loading ? 'Registering...' : 'Register & Send OTP'}
+              {loading ? 'Registering...' : 'Register & Send OTP →'}
             </button>
-            <button className="btn-ghost" onClick={() => setStep('phone')}>Back</button>
+            <button className="btn-ghost" onClick={() => setStep('phone')}>Already registered? Log in</button>
           </div>
         )}
 
+        {/* OTP Step */}
         {step === 'otp' && (
           <div className="login-form">
             <h2>Enter OTP</h2>
             <p className="subtitle">Sent to +91 {phone}</p>
+            <div className="info-banner">
+              <p>📱 OTP is valid for 5 minutes. Check terminal for test OTP.</p>
+            </div>
             <input
               className="input-field otp-input"
               type="tel"
-              placeholder="6-digit OTP"
+              placeholder="123456"
               value={otp}
               onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
               maxLength={6}
             />
             <button className="btn-primary" onClick={handleVerifyOTP} disabled={loading}>
-              {loading ? 'Verifying...' : 'Verify & Login'}
+              {loading ? 'Verifying...' : 'Verify & Login →'}
             </button>
             <button className="btn-ghost" onClick={() => setStep('phone')}>Change Number</button>
           </div>
         )}
+
       </div>
     </div>
   );
