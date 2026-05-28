@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://192.168.1.5:8000',
+  baseURL: 'https://autoprint-backend-qk6x.onrender.com',
 });
 
 // ── JWT Interceptor ───────────────────────────────────────────────────────────

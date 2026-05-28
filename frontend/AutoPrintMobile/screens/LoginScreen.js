@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://192.168.1.5:8000'; // Change this to your laptop IP
+const API_URL = 'https://autoprint-backend-qk6x.onrender.com'; // Change this to your laptop IP
 
 export default function LoginScreen({ navigation }) {
   const [step, setStep] = useState('phone'); // phone | otp | register
