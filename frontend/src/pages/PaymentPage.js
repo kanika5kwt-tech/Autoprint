@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { createPaymentOrder, verifyPayment } from '../services/api';
@@ -14,16 +14,7 @@ export default function PaymentPage() {
   const job_code = state?.job_code;
   const total_amount = state?.total_amount;
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!job_id) {
-      navigate('/dashboard');
-      return;
-    }
-    loadOrder();
-  }, [job_id]);
-
-  const loadOrder = async () => {
+  const loadOrder = useCallback(async () => {
     setLoading(true);
     try {
       const res = await createPaymentOrder(job_id);
@@ -32,7 +23,15 @@ export default function PaymentPage() {
       toast.error('Failed to create payment order');
     }
     setLoading(false);
-  };
+  }, [job_id]);
+
+  useEffect(() => {
+    if (!job_id) {
+      navigate('/dashboard');
+      return;
+    }
+    loadOrder();
+  }, [job_id, loadOrder, navigate]);
 
   // DEMO MODE - always mock, no real payment
   const handleRazorpay = () => {
